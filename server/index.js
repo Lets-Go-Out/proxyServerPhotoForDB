@@ -35,7 +35,6 @@ const server = http.createServer((req, res) => {
           res.writeHead(200,{
             'Content-Type': 'application/json'
           });
-console.log(result)
         res.end(result);
         } else {
 	  let quer = `SELECT photoobj FROM restaurants WHERE id=${id}`;
@@ -44,7 +43,6 @@ console.log(result)
             res.writeHead(200, {
    	      'Content-Type': 'application/json'
             })
-console.log(photos)
            res.end(photos.rows);
           }).catch(err => console.log(err))
         }
@@ -60,6 +58,23 @@ console.log(photos)
       res.end(JSON.stringify(resp));
     }).catch(err => console.log(err))
 
+  } else if(req.method === 'POST') {
+    let dataCatch = '';
+    req.on('data', chunk => {
+      dataCatch += chunk;
+    });
+    req.on('end', () => {
+      let { name, date, photoobj } = JSON.parse(dataCatch);
+	photoobj = JSON.stringify(photoobj);
+	console.log(photoobj)
+      let quer = `INSERT INTO restaurants (date,name,photoobj) VALUES ('${date}', '${name}', '${photoobj}')`;
+      pg.query(quer).then(resp => {
+	res.writeHead(200, {
+          'Content-type': 'application/json'
+        })
+	res.end(JSON.stringify(resp));
+      }).catch(err => console.log(err));
+    })
   }
   
 }).listen(PORT, () => console.log(`SERVER LISTENING ON ${PORT}`))
