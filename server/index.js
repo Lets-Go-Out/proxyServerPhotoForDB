@@ -8,6 +8,7 @@ const http = require('http');
 const PORT = process.env.PORT || 3000;
 
 const server = http.createServer((req, res) => {
+  console.log(req.method);
   if(req.method === 'GET') {
     if(req.url === '/restNames') {
       redisDB.get('popular', (err, result) => {
@@ -49,6 +50,16 @@ console.log(photos)
         }
       })
     }
+  } else if(req.method === 'DELETE') {
+    let id = req.url.substr(1);
+    let quer = `DELETE FROM restaurants WHERE id=${id}`;
+    pg.query(quer).then(resp => {
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+      });
+      res.end(JSON.stringify(resp));
+    }).catch(err => console.log(err))
+
   }
   
 }).listen(PORT, () => console.log(`SERVER LISTENING ON ${PORT}`))
