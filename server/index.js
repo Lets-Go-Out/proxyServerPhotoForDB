@@ -8,7 +8,6 @@ const http = require('http');
 const PORT = process.env.PORT || 3000;
 
 const server = http.createServer((req, res) => {
-  console.log(req.method);
   if(req.method === 'GET') {
     if(req.url === '/restNames') {
       redisDB.get('popular', (err, result) => {
@@ -43,7 +42,7 @@ const server = http.createServer((req, res) => {
             res.writeHead(200, {
    	      'Content-Type': 'application/json'
             })
-           res.end(photos.rows);
+           res.end(JSON.stringify(photos.rows));
           }).catch(err => console.log(err))
         }
       })
@@ -65,8 +64,7 @@ const server = http.createServer((req, res) => {
     });
     req.on('end', () => {
       let { name, date, photoobj } = JSON.parse(dataCatch);
-	photoobj = JSON.stringify(photoobj);
-	console.log(photoobj)
+      photoobj = JSON.stringify(photoobj);
       let quer = `INSERT INTO restaurants (date,name,photoobj) VALUES ('${date}', '${name}', '${photoobj}')`;
       pg.query(quer).then(resp => {
 	res.writeHead(200, {
@@ -82,8 +80,7 @@ const server = http.createServer((req, res) => {
     });
     req.on('end', () => {
       let { id, name, date, photoobj } = JSON.parse(dataCatch);
-        photoobj = JSON.stringify(photoobj);
-        console.log(photoobj)
+      photoobj = JSON.stringify(photoobj);
       let quer = `UPDATE restaurants SET date='${date}', name='${name}', photoobj='${photoobj}' WHERE id='${id}'`;
       pg.query(quer).then(resp => {
         console.log(resp)
