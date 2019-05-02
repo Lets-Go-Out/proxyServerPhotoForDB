@@ -75,6 +75,24 @@ const server = http.createServer((req, res) => {
 	res.end(JSON.stringify(resp));
       }).catch(err => console.log(err));
     })
+  } else if(req.method === 'PATCH') {
+    let dataCatch = '';
+    req.on('data', chunk => {
+      dataCatch += chunk;
+    });
+    req.on('end', () => {
+      let { id, name, date, photoobj } = JSON.parse(dataCatch);
+        photoobj = JSON.stringify(photoobj);
+        console.log(photoobj)
+      let quer = `UPDATE restaurants SET date='${date}', name='${name}', photoobj='${photoobj}' WHERE id='${id}'`;
+      pg.query(quer).then(resp => {
+        console.log(resp)
+        res.writeHead(200, {
+          'Content-type': 'application/json'
+        })
+	res.end(JSON.stringify(resp));
+      }).catch(err => console.log(err));
+    })
   }
   
 }).listen(PORT, () => console.log(`SERVER LISTENING ON ${PORT}`))
