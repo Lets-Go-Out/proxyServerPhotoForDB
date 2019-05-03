@@ -8,7 +8,9 @@
   },
   "author": "Ben Poling",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "newrelic": "^5.7.0"
+  },
   "devDependencies": {
     "dotenv": "^7.0.0",
     "pg": "^7.10.0",

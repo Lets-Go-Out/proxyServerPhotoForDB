@@ -9,3 +9,6 @@ node_modules/
 .bash_profile
 .bashrc
 .config/
+newrelic.js
+.node-gyp/
+.pm2/

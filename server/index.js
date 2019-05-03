@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 dotenv.config();
-
+require('newrelic')
 const pg = require('/home/ec2-user/postgres/postgres.js')
 const redisDB = require('/home/ec2-user/redis/redis.js');
 const http = require('http');
@@ -75,13 +75,13 @@ const server = http.createServer((req, res) => {
     })
   } else if(req.method === 'PATCH') {
     let dataCatch = '';
-    req.on('data', chunk => {
+   req.on('data', chunk => {
       dataCatch += chunk;
     });
     req.on('end', () => {
-      let { id, name, date, photoobj } = JSON.parse(dataCatch);
+      let { name, date, photoobj } = JSON.parse(dataCatch);
       photoobj = JSON.stringify(photoobj);
-      let quer = `UPDATE restaurants SET date='${date}', name='${name}', photoobj='${photoobj}' WHERE id='${id}'`;
+      let quer = `UPDATE restaurants SET date='${date}', name='${name}', photoobj='${photoobj}' WHERE id=${id}`;
       pg.query(quer).then(resp => {
         console.log(resp)
         res.writeHead(200, {
