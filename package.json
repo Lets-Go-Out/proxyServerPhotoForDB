@@ -9,6 +9,7 @@
   "author": "Ben Poling",
   "license": "ISC",
   "dependencies": {
+    "eslint": "^5.16.0",
     "newrelic": "^5.7.0"
   },
   "devDependencies": {
