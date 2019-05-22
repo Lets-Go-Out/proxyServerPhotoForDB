@@ -46,7 +46,7 @@ const server = http
                 });
                 res.end(JSON.stringify(photos.rows));
               })
-              .catch(err => console.log(err));
+              .catch(err => res.end(err));
           }
         });
       }
@@ -60,7 +60,7 @@ const server = http
           });
           res.end(JSON.stringify(resp));
         })
-        .catch(err => console.log(err));
+        .catch(err => res.end(err));
     } else if (req.method === "POST") {
       let dataCatch = "";
       req.on("data", chunk => {
@@ -77,7 +77,7 @@ const server = http
             });
             res.end(JSON.stringify(resp));
           })
-          .catch(err => console.log(err));
+          .catch(err => res.end(err));
       });
     } else if (req.method === "PATCH") {
       let dataCatch = "";
@@ -90,13 +90,12 @@ const server = http
         let quer = `UPDATE restaurants SET date='${date}', name='${name}', photoobj='${photoobj}' WHERE id=${id}`;
         pg.query(quer)
           .then(resp => {
-            console.log(resp);
             res.writeHead(200, {
               "Content-type": "application/json"
             });
             res.end(JSON.stringify(resp));
           })
-          .catch(err => console.log(err));
+          .catch(err => res.end(err));
       });
     }
   })
